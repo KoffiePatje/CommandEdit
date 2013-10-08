@@ -1,0 +1,6 @@
+# Write down the commands without slashes command: alias
+commands:
+  - /morning = /time 08:00
+  - /noon = /time 12:00
+  - /night = /time 0:00
+  
