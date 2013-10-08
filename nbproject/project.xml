@@ -3,7 +3,7 @@
     <type>org.netbeans.modules.java.j2seproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
-            <name>BasePlugin</name>
+            <name>CommandEdit</name>
             <source-roots>
                 <root id="src.files.dir"/>
                 <root id="src.src.dir"/>
