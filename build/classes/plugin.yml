@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 name: CommandEdit
 main: nl.pleduc.mc.CommandEdit.CommandEdit
 version: 1.0
@@ -20,6 +21,8 @@ permissions:
    commandedit.access:
      description: Gives access to the menu of CommandEdit
 =======
+=======
+>>>>>>> 8aceaaa1fec98e84cde622414f9ab079ca04f048
 name: CommandEdit
 main: nl.pleduc.mc.CommandEdit.CommandEdit
 version: 1.0
@@ -40,5 +43,8 @@ permissions:
        
    commandedit.access:
      description: Gives access to the menu of CommandEdit
+<<<<<<< HEAD
+>>>>>>> 8aceaaa1fec98e84cde622414f9ab079ca04f048
+=======
 >>>>>>> 8aceaaa1fec98e84cde622414f9ab079ca04f048
      default: op

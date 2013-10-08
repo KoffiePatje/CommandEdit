@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // ------------------------------------------------------------------------ //
 //                              File Reference                              //
 // Author: Patrick le Duc                                                   //
@@ -46,3 +47,21 @@ public class CommandEditListener {
 
 >>>>>>> 8aceaaa1fec98e84cde622414f9ab079ca04f048
 }
+=======
+// ------------------------------------------------------------------------ //
+//                              File Reference                              //
+// Author: Patrick le Duc                                                   //
+// Filename: CommandEditListener.java                                                   //
+// License: GNU GPLv2                                                       //
+// Description:                                                             //
+// -- SOMETHING --                                                           //
+//                                                                          //
+// ------------------------------------------------------------------------ //
+
+package nl.pleduc.mc.CommandEdit;
+
+
+public class CommandEditListener {
+
+}
+>>>>>>> 8aceaaa1fec98e84cde622414f9ab079ca04f048

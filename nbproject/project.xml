@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://www.netbeans.org/ns/project/1">
     <type>org.netbeans.modules.java.j2seproject</type>
@@ -14,6 +15,8 @@
     </configuration>
 </project>
 =======
+=======
+>>>>>>> 8aceaaa1fec98e84cde622414f9ab079ca04f048
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://www.netbeans.org/ns/project/1">
     <type>org.netbeans.modules.java.j2seproject</type>
@@ -28,4 +31,7 @@
         </data>
     </configuration>
 </project>
+<<<<<<< HEAD
+>>>>>>> 8aceaaa1fec98e84cde622414f9ab079ca04f048
+=======
 >>>>>>> 8aceaaa1fec98e84cde622414f9ab079ca04f048
