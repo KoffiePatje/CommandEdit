@@ -29,6 +29,13 @@ public class CustomConfig
     {
         m_Filename = a_Name;
         m_Plugin = a_Plugin;
+    
+        ReloadCustomConfig();
+        
+        if( !m_Plugin.getDataFolder().exists() )
+        {
+            SafeDefaultConfig();
+        }
     }
     
     // Returns the config
@@ -43,12 +50,12 @@ public class CustomConfig
     {
         if( m_ConfigFile == null )
         {
-            m_ConfigFile = new File( m_Plugin.getDataFolder() ,m_Filename);
+            m_ConfigFile = new File( m_Plugin.getDataFolder(), m_Filename);
         }
         
         m_Config = YamlConfiguration.loadConfiguration( m_ConfigFile );
         
-        InputStream defaultConfigStream = m_Plugin.getResource( "commands.yml" );
+        InputStream defaultConfigStream = m_Plugin.getResource( m_Filename );
         if( defaultConfigStream != null )
         {
             YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration( defaultConfigStream );

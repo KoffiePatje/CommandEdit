@@ -10,34 +10,41 @@
 
 package nl.pleduc.mc.CommandEdit;
 
-import org.bukkit.event.EventPriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CommandEdit extends JavaPlugin
 {
-    private boolean m_Debugging = true;
+    private boolean m_Debugging = false;
     private String pluginName = "CommandEdit";
     private String pluginVersion = "v1.0";
     
     private CommandEditFileLoader m_Filesystem;
+    private CommandEditProcessor m_Processor;
     
     @Override
     public void onEnable()
     {
+        // Initialize Classes
+        m_Filesystem = new CommandEditFileLoader( this );
+        m_Debugging = m_Filesystem.getCustomConfig().getBoolean( "debugmode" );
+        m_Filesystem.Reload();
+
+        m_Processor = new CommandEditProcessor( this, m_Filesystem );
+        
         // Catch all commands with the command edit executor for clean code purposes
         getCommand( "commandedit" ).setExecutor( new CommandEditCommandExecutor( this ) );
         
         // Register the Listeners
-        this.getServer().getPluginManager().registerEvents( new CommandEditListener( this ), this );
+        this.getServer().getPluginManager().registerEvents( new CommandEditListener( this, m_Processor ), this );
         
-        m_Filesystem = new CommandEditFileLoader( this );
-        m_Filesystem.Reload();
+        this.getLogger().info( "CommandEdit succesfully loaded ! Debugmode is " + (m_Debugging?"enabled":"disabled" ) );
     }
     
     @Override
     public void onDisable()
     {
-        
+        m_Filesystem = null;
+        m_Processor = null;
     }
     
     public String getPluginName()
@@ -50,4 +57,8 @@ public class CommandEdit extends JavaPlugin
         return pluginVersion;
     }
     
+    public boolean isDebugging()
+    {
+        return m_Debugging;
+    }  
 }

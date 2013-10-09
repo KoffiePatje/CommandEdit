@@ -19,10 +19,12 @@ import org.bukkit.event.Listener;
 public class CommandEditListener implements Listener
 {
     private CommandEdit m_Base;
+    private CommandEditProcessor m_Processor;
     
-    public CommandEditListener( CommandEdit base )
+    public CommandEditListener( CommandEdit base, CommandEditProcessor processor )
     {
         m_Base = base;
+        m_Processor = processor;
     }
     
     @EventHandler( priority = EventPriority.HIGH )
@@ -30,6 +32,10 @@ public class CommandEditListener implements Listener
     {
         String m = event.getMessage();
         
-        m_Base.getLogger().info( "Command Edit catched the following command: " + m );
+        // Debugging
+        if( m_Base.isDebugging() ){ m_Base.getLogger().info( "Command Edit catched the following command: " + m ); }
+        
+        event.setMessage( m_Processor.ProcessCommand( event ) );
+           
     }
 }

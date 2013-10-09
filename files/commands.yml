@@ -1,6 +1,22 @@
 # Write down the commands without slashes command: alias
+# You can define a "variable" by putting it between brackets {Example} ( No $ sign )
+# Predefined variables
+# - {$PlayerName}   - returns the name of the player who executes the command
+# - {$DisplayName}  - returns the players display name
+# - {$WorldName}    - returns the name of the world the player is in
+# - {$String}       - takes the last line of arguments as 1 string
+#
+# Function ( can only be used in the first variable )
+# - [ChatAs]        - Alter the player the command was send from
 commands:
-  - /morning = /time 08:00
-  - /noon = /time 12:00
-  - /night = /time 0:00
-  
+  - /morning = /time set 2000
+  - /noon = /time set 6000
+  - /night = /time set 18000
+  - /clear = /weather clear
+  - /rain = /weather rain
+  - /thunder = /weather thunder
+  - /gm {Mode} = /gamemode {Mode}
+  - /tp {TargetPlayer} = /tp {$PlayerName} {TargetPlayer}
+  - /tell {$String} = /tell {$PlayerName} {$String}
+  - /sayas {TargetPlayer} {$String} = [ChatAs] {TargetPlayer} {$String}
+debugmode: true

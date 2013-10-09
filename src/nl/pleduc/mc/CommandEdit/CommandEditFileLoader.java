@@ -9,26 +9,35 @@
 // ------------------------------------------------------------------------ //
 package nl.pleduc.mc.CommandEdit;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
+import org.bukkit.configuration.file.FileConfiguration;
 
 public class CommandEditFileLoader 
 {
     private CommandEdit m_Base;
     private CustomConfig m_Config;
     
-    private ArrayList< String > m_Commands;
-    private ArrayList< String > m_Aliases;
+    private ArrayList< CommandEditCommand > m_Commands;
     
     CommandEditFileLoader( CommandEdit base )
     {
         m_Base = base;
         m_Config = new CustomConfig( "commands.yml", base );
         
-        m_Commands = new ArrayList< String >();
-        m_Aliases = new ArrayList< String >();
+        m_Commands = new ArrayList< CommandEditCommand >();
     }
     
+    FileConfiguration getCustomConfig()
+    {
+        return m_Config.getConfig();
+    }
+    
+    ArrayList< CommandEditCommand > GetCommandList()
+    {
+        return m_Commands;
+    }
+        
     public void Load()
     {
         ArrayList< String > stringList = ( ArrayList<String> )m_Config.getConfig().getList( "commands" );
@@ -43,11 +52,10 @@ public class CommandEditFileLoader
     public void Reload()
     {
         m_Commands.clear();
-        m_Aliases.clear();
         Load();
     }
     
-    private void ProcessLine( String a_Line )
+    public CommandEditCommand ProcessLine( String a_Line )
     {
         String command = "";
         String alias = "";
@@ -67,14 +75,50 @@ public class CommandEditFileLoader
         if( alias.indexOf( " " ) == 0 )                             alias = alias.substring( 1 ); 
         if( alias.lastIndexOf( " " ) == alias.length() - 1 )        alias = alias.substring( 0, alias.length() - 1 );
         
-        AddCommand( command, alias );
+        // Split into command + args
+        String[] commandArgs = command.split( " " );
+        String[] aliasArgs = alias.split( " " );
+        
+        command = commandArgs[0];
+        alias = aliasArgs[0];
+        
+        if( commandArgs.length > 1 )
+        { 
+            commandArgs = Arrays.copyOfRange( commandArgs, 1, commandArgs.length ); 
+        }
+        else
+        {
+            commandArgs[0] = "";
+        }
+        if( aliasArgs.length > 1 )
+        { 
+            aliasArgs = Arrays.copyOfRange( aliasArgs, 1, aliasArgs.length ); 
+        }
+        else
+        {
+            aliasArgs[0] = "";
+        }
+        
+        CommandEditCommand a_Command = new CommandEditCommand();
+        
+        a_Command.m_Command = command;
+        a_Command.m_CommandArgs = commandArgs;
+        
+        a_Command.m_Alias = alias;
+        a_Command.m_AliasArgs = aliasArgs;
+        
+        a_Command.m_String = ( commandArgs[ commandArgs.length - 1 ].equalsIgnoreCase( "{$String}" ) );
+        a_Command.m_Function = ( alias.matches( "(\\[).*?(\\])" )?true:false );
+        
+        m_Commands.add( a_Command );
+        
+        if( m_Base.isDebugging() )
+        { 
+            m_Commands.get( m_Commands.size() - 1 ).PrintContent( m_Base.getLogger() );
+        }
+        
+        return a_Command;
     }
     
-    private void AddCommand( String a_Command, String a_Alias )
-    {
-        m_Commands.add( a_Command );
-        m_Aliases.add( a_Alias );
-        m_Base.getLogger().info( "Registered command: \"" + a_Command + "\" with the alias: \"" + a_Alias + "\"" );
-    }
     
 }
