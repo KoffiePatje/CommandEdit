@@ -1,10 +1,10 @@
 // ------------------------------------------------------------------------ //
 //                              File Reference                              //
 // Author: Patrick le Duc                                                   //
-// Filename: CommandEditProcessor.java                                                   //
+// Filename: CommandEditProcessor.java                                      //
 // License: GNU GPLv2                                                       //
 // Description:                                                             //
-// -- SOMETHING --                                                           //
+// Processes commands and translates them to their alias if needed          //
 //                                                                          //
 // ------------------------------------------------------------------------ //
 
@@ -134,7 +134,9 @@ public class CommandEditProcessor
             {
                 ProcessFunction( returnCommand, event );
                 
+                m_Base.getLogger().info( "Event Cancelled run function instead" );
                 event.setCancelled( true );
+
                 return "/NoCommand";
             }
             
@@ -181,7 +183,7 @@ public class CommandEditProcessor
                 // Run the Chat As
                 a_TargetPlayer.chat( Message );
             }
-            else { if( m_Base.isDebugging() ){ m_Base.getLogger().info( "Targetplayer: " + Args[0] + " not found..." ); } }
-        }
+            else { if( m_Base.isDebugging() ){ m_Base.getLogger().info( "Targetplayer: " + Args[0] + " not found..." );  } }
+       }
     }
 }

@@ -4,7 +4,7 @@
 // Filename: CommandEditFileLoader.java                                     //
 // License: GNU GPLv2                                                       //
 // Description:                                                             //
-// -- SOMETHING --                                                          //
+// Loads the configuration file for this plugin                             //
 //                                                                          //
 // ------------------------------------------------------------------------ //
 package nl.pleduc.mc.CommandEdit;

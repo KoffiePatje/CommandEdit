@@ -1,10 +1,10 @@
 // ------------------------------------------------------------------------ //
 //                              File Reference                              //
 // Author: Patrick le Duc                                                   //
-// Filename: CommandEditCommandExecutor.java                                                   //
+// Filename: CommandEditCommandExecutor.java                                //
 // License: GNU GPLv2                                                       //
 // Description:                                                             //
-// -- SOMETHING --                                                           //
+// Processes all /commandedit * commands                                    //
 //                                                                          //
 // ------------------------------------------------------------------------ //
 

@@ -1,10 +1,10 @@
 // ------------------------------------------------------------------------ //
 //                              File Reference                              //
 // Author: Patrick le Duc                                                   //
-// Filename: CommandEditCommand.java                                                   //
+// Filename: CommandEditCommand.java                                        //
 // License: GNU GPLv2                                                       //
 // Description:                                                             //
-// -- SOMETHING --                                                           //
+// Simple structure in which the command edit commands are stored           //
 //                                                                          //
 // ------------------------------------------------------------------------ //
 

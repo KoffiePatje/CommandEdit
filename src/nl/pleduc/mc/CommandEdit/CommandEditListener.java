@@ -4,7 +4,7 @@
 // Filename: CommandEditListener.java                                       //
 // License: GNU GPLv2                                                       //
 // Description:                                                             //
-// -- SOMETHING --                                                          //
+// Listens to players firing commands, catching them and processing them    //
 //                                                                          //
 // ------------------------------------------------------------------------ //
 
@@ -35,7 +35,7 @@ public class CommandEditListener implements Listener
         // Debugging
         if( m_Base.isDebugging() ){ m_Base.getLogger().info( "Command Edit catched the following command: " + m ); }
         
-        event.setMessage( m_Processor.ProcessCommand( event ) );
-           
+        event.setMessage( m_Processor.ProcessCommand( event ) );     
     }
+        
 }

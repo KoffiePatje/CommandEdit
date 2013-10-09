@@ -1,10 +1,10 @@
 // ------------------------------------------------------------------------ //
 //                              File Reference                              //
 // Author: Patrick le Duc                                                   //
-// Filename: CommandEdit.java                                                   //
-// License: GNU GPLv2
+// Filename: CommandEdit.java                                               //
+// License: GNU GPLv2                                                       //
 // Description:                                                             //
-// Base Class of the MyWorld Plugin                                         //
+// Command Edits Main Class                                                 //
 //                                                                          //
 // ------------------------------------------------------------------------ //
 
