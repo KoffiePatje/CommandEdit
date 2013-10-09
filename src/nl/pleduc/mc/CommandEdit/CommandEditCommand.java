@@ -40,7 +40,7 @@ public class CommandEditCommand
             {
                 AliasLine += " " + a_Alias.m_AliasArgs[j];
             }
-            a_Logger.info( "Registered Alias: " + AliasLine ); 
+            a_Logger.info( "Registered Alias: " + AliasLine + (a_Alias.m_Function?" - Function":"") );
         }
     }
 }

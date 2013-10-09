@@ -1,6 +1,6 @@
 name: CommandEdit
 main: nl.pleduc.mc.CommandEdit.CommandEdit
-version: 1.1
+version: 0.1
 author: KoffiePatje / Patrick le Duc
 
 commands:

@@ -47,7 +47,7 @@ public class CommandEditFileLoader
         
         for( int i = 0; i < stringList.size(); i++ )
         {
-            String commandString = stringList.get( i ).toLowerCase();
+            String commandString = stringList.get( i );
             ProcessLine( commandString );
         }
     }
@@ -107,7 +107,7 @@ public class CommandEditFileLoader
             a_Alias.m_Alias = m_Command;
             a_Alias.m_AliasArgs = m_CommandArgs;
             
-            a_Alias.m_Function = m_Command.matches( "( \\[).*?(\\])" );
+            a_Alias.m_Function = m_Command.matches( "(\\[).*?(\\])" );
 
             a_Command.m_Alias.add( a_Alias );
             

@@ -202,6 +202,16 @@ public class CommandEditProcessor
                 a_TargetPlayer.chat( Message );
             }
             else { if( m_Base.isDebugging() ){ m_Base.getLogger().info( "Targetplayer: " + Args[0] + " not found..." );  } }
-       }
+        }
+        // Message
+        if( Function.equalsIgnoreCase( "[message]" ) )
+        {
+            // Concatenate the message
+            String Message = Args[0];
+            for( int i = 1; i < Args.length; i++ ){ Message += " " + Args[i]; }
+            
+            event.getPlayer().sendMessage( Message );
+        }
+        
     }
 }

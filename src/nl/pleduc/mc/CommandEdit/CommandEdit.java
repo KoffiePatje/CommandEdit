@@ -16,7 +16,7 @@ public class CommandEdit extends JavaPlugin
 {
     private boolean m_Debugging = false;
     private String pluginName = "CommandEdit";
-    private String pluginVersion = "v1.1";
+    private String pluginVersion = "v0.1";
     
     private CommandEditFileLoader m_Filesystem;
     private CommandEditProcessor m_Processor;

@@ -2,7 +2,7 @@
 #                                                                                       #
 # CommandEdit by Patrick le Duc / KoffiePatje ( commands.yml )                          #
 #                                                                                       #
-# Define new aliases: /command = /alias                                                 #
+# Define new aliases: /command = /alias | /alias | /alias                               #
 #                                                                                       #
 # You can define a "variable" by putting it between brackets {Example} ( No $ sign )    #
 #                                                                                       #
@@ -14,17 +14,22 @@
 #                                                                                       #
 # Function ( can only be used in the first variable )                                   #
 # - [ChatAs]        - Alter the player the command was send from                        #
+# - [Message]       - Sends a messsage to the player                                    #
 #                                                                                       #
 # ------------------------------------------------------------------------------------- #
 commands:
-  - /morning = /time set 2000 | /weather clear
+#   Time Functions
+  - /morning = /time set 2000
   - /noon = /time set 6000
   - /night = /time set 18000
+#   Weather Functions
   - /clear = /weather clear
   - /rain = /weather rain
   - /thunder = /weather thunder
+#   GameMode
   - /gm {Mode} = /gamemode {Mode}
-  - /tp {TargetPlayer} = /tp {$PlayerName} {TargetPlayer}
-  - /tell {$String} = /tell {$PlayerName} {$String}
+#   Chat Commands
   - /sayas {TargetPlayer} {$String} = [ChatAs] {TargetPlayer} {$String}
+#   Information Commands
+  - /care = [Message] You probably don't
 debugmode: true
