@@ -27,7 +27,7 @@ public class CommandEditProcessor
         m_FileLoader = fileloader;
     }
     
-    String ProcessCommand( PlayerCommandPreprocessEvent event )
+    boolean ProcessCommand( PlayerCommandPreprocessEvent event )
     {
         String returnCommand = event.getMessage();
         String Command = event.getMessage();
@@ -47,11 +47,13 @@ public class CommandEditProcessor
             Args[0] = "";
         }
         
+        // Get the list of commands
         ArrayList< CommandEditCommand > a_CommandList = m_FileLoader.GetCommandList();
         
         CommandEditCommand a_Command = null;
         int index = -1;
         
+        // Loop through all commands to see if we have a match
         for( int i = 0; i < a_CommandList.size(); i++ )
         {
             if( a_CommandList.get( i ).m_Command.equalsIgnoreCase( Command ) )
@@ -67,25 +69,53 @@ public class CommandEditProcessor
                 
             }
         }
-        // If match found adjust the command to meet our needs
+        
+        // If match found dispatch all alias commands
         if( index >= 0 )
         {
-            // Form new command
-            returnCommand = a_Command.m_Alias;
-            for( int i = 0; i < a_Command.m_AliasArgs.length; i++ )
+            // For each alias
+            for( int k = 0; k < a_Command.m_Alias.size(); k++ )
             {
-                String AA = a_Command.m_AliasArgs[i];
+                CommandEditAlias a_CEA = a_Command.m_Alias.get( k );
+                String m_Alias = a_CEA.m_Alias;
+                String[] m_AliasArgs = a_CEA.m_AliasArgs;
                 
-                // If an argument matches a pre-defined variable type {$Example}
-                if( AA.matches( "(\\{)(\\$).*?(\\})") )
-                {                    
-                    if( AA.equalsIgnoreCase( "{$PlayerName}" ) ){ AA = event.getPlayer().getName(); }
-                    else if( AA.equalsIgnoreCase( "{$DisplayName}" ) ){ AA = event.getPlayer().getName(); }
-                    else if( AA.equalsIgnoreCase( "{$WorldName}" ) ){ AA = event.getPlayer().getWorld().getName(); }
-                    // Special case, add all args after this to the command
-                    else if( AA.equalsIgnoreCase( "{$String}" ) )
+                // Form new command
+                returnCommand = m_Alias;
+                for( int i = 0; i < m_AliasArgs.length; i++ )
+                {
+                    String AA = m_AliasArgs[i];
+
+                    // If an argument matches a pre-defined variable type {$Example}
+                    if( AA.matches( "(\\{)(\\$).*?(\\})") )
+                    {                    
+                        if( AA.equalsIgnoreCase( "{$PlayerName}" ) ){ AA = event.getPlayer().getName(); }
+                        else if( AA.equalsIgnoreCase( "{$DisplayName}" ) ){ AA = event.getPlayer().getName(); }
+                        else if( AA.equalsIgnoreCase( "{$WorldName}" ) ){ AA = event.getPlayer().getWorld().getName(); }
+                        // Special case, add all args after this to the command
+                        else if( AA.equalsIgnoreCase( "{$String}" ) )
+                        {
+                            int idx = -1;
+                            for( int j = 0; j < a_Command.m_CommandArgs.length; j++ )
+                            {
+                                if( a_Command.m_CommandArgs[j].equalsIgnoreCase( AA ) )
+                                {
+                                    idx = j;
+                                    break;
+                                }
+                            }
+                            AA = Args[ idx ];
+                            for( int j = idx + 1; j < Args.length; j++ )
+                            {
+                                AA += " " + Args[j];
+                            }
+                        }   
+                    }
+                    // If an argument is a variable {Example}
+                    else if( AA.matches( "(\\{).*?(\\})") )
                     {
                         int idx = -1;
+
                         for( int j = 0; j < a_Command.m_CommandArgs.length; j++ )
                         {
                             if( a_Command.m_CommandArgs[j].equalsIgnoreCase( AA ) )
@@ -94,56 +124,44 @@ public class CommandEditProcessor
                                 break;
                             }
                         }
-                        AA = Args[ idx ];
-                        for( int j = idx + 1; j < Args.length; j++ )
+                        if( idx < 0 )
                         {
-                            AA += " " + Args[j];
+                            m_Base.getLogger().info( "Encountered an error with Command Edit command: " + Command );
                         }
-                    }   
-                }
-                // If an argument is a variable {Example}
-                else if( AA.matches( "(\\{).*?(\\})") )
-                {
-                    int idx = -1;
-                    
-                    for( int j = 0; j < a_Command.m_CommandArgs.length; j++ )
-                    {
-                        if( a_Command.m_CommandArgs[j].equalsIgnoreCase( AA ) )
-                        {
-                            idx = j;
-                            break;
-                        }
-                    }
-                    if( idx < 0 )
-                    {
-                        m_Base.getLogger().info( "Encountered an error with Command Edit command: " + Command );
-                    }
-                    
-                    // Set the alias argument to the value found
-                    AA = Args[ idx ];
-                }
-                
-                // Add the alias arg to the command line
-                returnCommand += ( " " + AA );
-                
-                // Debugging Purposes
-                if( m_Base.isDebugging() ){ m_Base.getLogger().info( "Replaced: " + a_Command.m_AliasArgs[i] + " with " + AA ); }       
-            }
-            
-            if( a_Command.m_Function )
-            {
-                ProcessFunction( returnCommand, event );
-                
-                m_Base.getLogger().info( "Event Cancelled run function instead" );
-                event.setCancelled( true );
 
-                return "/NoCommand";
+                        // Set the alias argument to the value found
+                        AA = Args[ idx ];
+                    }
+
+                    // Add the alias arg to the command line
+                    returnCommand += ( " " + AA );
+
+                    // Debugging Purposesu
+                    if( m_Base.isDebugging() ){ m_Base.getLogger().info( "Replaced: " + m_AliasArgs[i] + " with " + AA ); }       
+                }
+
+                // Debugging Purposes
+                if( m_Base.isDebugging() ){ m_Base.getLogger().info( "Altered Command: " + returnCommand ); }
+                
+                // If function handle the function else dispatch the command
+                if( a_CEA.m_Function )
+                {
+                    // Process the function
+                    ProcessFunction( returnCommand, event );
+                }
+                else
+                {
+                    //Dispatch each Alias
+                    returnCommand = returnCommand.replaceFirst( "/", "" );
+                    m_Base.getServer().dispatchCommand( event.getPlayer(), returnCommand );
+                }
             }
             
-            if( m_Base.isDebugging() ){ m_Base.getLogger().info( "Altered Command: " + returnCommand ); }
+            return true;
+            
         }
         
-        return returnCommand;
+        return false;
     }
     
     void ProcessFunction( String a_CommandLine, PlayerCommandPreprocessEvent event )
@@ -165,8 +183,8 @@ public class CommandEditProcessor
             Args[0] = "";
         }
         
-        // Chatas {TargetPlayer} {String}
-        if( Function.equalsIgnoreCase( "[chatas]" ) )
+        // Chatas {TargetPlayer} {String} + need to be OP for this command
+        if( Function.equalsIgnoreCase( "[chatas]" ) && event.getPlayer().isOp() )
         { 
             // Find Target player
             Player a_TargetPlayer = m_Base.getServer().getPlayer( Args[0] );

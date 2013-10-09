@@ -11,17 +11,16 @@
 package nl.pleduc.mc.CommandEdit;
 
 import java.util.logging.Logger;
+import java.util.ArrayList;
 
 public class CommandEditCommand 
 {
     public String   m_Command;
     public String[] m_CommandArgs;
     
-    public String   m_Alias;
-    public String[] m_AliasArgs;
-    
+    public ArrayList< CommandEditAlias > m_Alias;
+            
     public boolean m_String;
-    public boolean m_Function;
     
     // Debugging Purposes
     void PrintContent( Logger a_Logger )
@@ -33,13 +32,15 @@ public class CommandEditCommand
         }
         a_Logger.info( "Registered Command: " + CommandLine ); 
         
-        String AliasLine = m_Alias;
-        for( int i = 0; i < m_AliasArgs.length; i++ )
+        for( int i = 0; i < m_Alias.size(); i++ )
         {
-            AliasLine += " " + m_AliasArgs[i];
+            CommandEditAlias a_Alias = m_Alias.get( i );
+            String AliasLine = a_Alias.m_Alias;
+            for( int j = 0; j < a_Alias.m_AliasArgs.length; j++ )
+            {
+                AliasLine += " " + a_Alias.m_AliasArgs[j];
+            }
+            a_Logger.info( "Registered Alias: " + AliasLine ); 
         }
-        a_Logger.info( "Registered Alias: " + AliasLine ); 
-        
-        a_Logger.info( "String: " + Boolean.toString( m_String ) + " Function: " + Boolean.toString( m_Function ) );
     }
 }

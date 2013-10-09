@@ -27,7 +27,7 @@ public class CommandEditListener implements Listener
         m_Processor = processor;
     }
     
-    @EventHandler( priority = EventPriority.HIGH )
+    @EventHandler( priority = EventPriority.HIGHEST )
     public void onPlayerCommand( PlayerCommandPreprocessEvent event )
     {
         String m = event.getMessage();
@@ -35,7 +35,7 @@ public class CommandEditListener implements Listener
         // Debugging
         if( m_Base.isDebugging() ){ m_Base.getLogger().info( "Command Edit catched the following command: " + m ); }
         
-        event.setMessage( m_Processor.ProcessCommand( event ) );     
+        event.setCancelled( m_Processor.ProcessCommand( event ) );     
     }
         
 }

@@ -18,14 +18,17 @@ public class CommandEditFileLoader
     private CommandEdit m_Base;
     private CustomConfig m_Config;
     
-    private ArrayList< CommandEditCommand > m_Commands;
+    private ArrayList< CommandEditCommand > m_CommandList;
+    
+    private String m_Command = "";
+    private String[] m_CommandArgs = null;
     
     CommandEditFileLoader( CommandEdit base )
     {
         m_Base = base;
         m_Config = new CustomConfig( "commands.yml", base );
         
-        m_Commands = new ArrayList< CommandEditCommand >();
+        m_CommandList = new ArrayList< CommandEditCommand >();
     }
     
     FileConfiguration getCustomConfig()
@@ -35,7 +38,7 @@ public class CommandEditFileLoader
     
     ArrayList< CommandEditCommand > GetCommandList()
     {
-        return m_Commands;
+        return m_CommandList;
     }
         
     public void Load()
@@ -51,74 +54,93 @@ public class CommandEditFileLoader
     
     public void Reload()
     {
-        m_Commands.clear();
+        m_CommandList.clear();
         Load();
     }
     
     public CommandEditCommand ProcessLine( String a_Line )
     {
-        String command = "";
-        String alias = "";
-        
-        String[] splitString = a_Line.split( "=" );
-    
-        if( splitString[0] != null && splitString[1] != null )
-        {   
-            command = splitString[0];
-            alias = splitString[1];
-        }
-        
-        // Remove spaces at start and end ( if they are there )
-        if( command.indexOf( " " ) == 0 )                           command = command.substring( 1 ); 
-        if( command.lastIndexOf( " " ) == command.length() - 1 )    command = command.substring( 0, command.length() - 1 );
-        
-        if( alias.indexOf( " " ) == 0 )                             alias = alias.substring( 1 ); 
-        if( alias.lastIndexOf( " " ) == alias.length() - 1 )        alias = alias.substring( 0, alias.length() - 1 );
-        
-        // Split into command + args
-        String[] commandArgs = command.split( " " );
-        String[] aliasArgs = alias.split( " " );
-        
-        command = commandArgs[0];
-        alias = aliasArgs[0];
-        
-        if( commandArgs.length > 1 )
-        { 
-            commandArgs = Arrays.copyOfRange( commandArgs, 1, commandArgs.length ); 
-        }
-        else
-        {
-            commandArgs[0] = "";
-        }
-        if( aliasArgs.length > 1 )
-        { 
-            aliasArgs = Arrays.copyOfRange( aliasArgs, 1, aliasArgs.length ); 
-        }
-        else
-        {
-            aliasArgs[0] = "";
-        }
-        
+        // Variables
         CommandEditCommand a_Command = new CommandEditCommand();
+        a_Command.m_Alias = new ArrayList< CommandEditAlias >();
+               
+        // Split the line Command = Alias | Alias | Alias
+        String[] commandSplit = a_Line.split( "=" );
+    
+        String commandLine = "";
+        String aliasLine = "";
         
-        a_Command.m_Command = command;
-        a_Command.m_CommandArgs = commandArgs;
+        if( commandSplit[0] != null && commandSplit[1] != null )
+        {   
+            commandLine = commandSplit[0];
+            aliasLine = commandSplit[1];
+        }
+       
+        // Store Command
+        ProcessCommand( commandLine );
+               
+        a_Command.m_Command = m_Command;
+        a_Command.m_CommandArgs = m_CommandArgs;
+              
+        a_Command.m_String = ( m_CommandArgs[ m_CommandArgs.length - 1 ].equalsIgnoreCase( "{$String}" ) );
+               
+        // Split the line Alias | Alias | Alias
+        String[] aliasSplit;
         
-        a_Command.m_Alias = alias;
-        a_Command.m_AliasArgs = aliasArgs;
+        if( aliasLine.contains( "|" ) )
+        {
+            aliasSplit = aliasLine.split( "\\|" );
+        }
+        else
+        {
+            aliasSplit = new String[1];
+            aliasSplit[0] = aliasLine;
+        }
         
-        a_Command.m_String = ( commandArgs[ commandArgs.length - 1 ].equalsIgnoreCase( "{$String}" ) );
-        a_Command.m_Function = ( alias.matches( "(\\[).*?(\\])" )?true:false );
-        
-        m_Commands.add( a_Command );
+        // Store Aliasses
+        for( int i = 0; i < aliasSplit.length; i++ )
+        {
+            ProcessCommand( aliasSplit[i] );
+            
+            CommandEditAlias a_Alias = new CommandEditAlias();
+       
+            a_Alias.m_Alias = m_Command;
+            a_Alias.m_AliasArgs = m_CommandArgs;
+            
+            a_Alias.m_Function = m_Command.matches( "( \\[).*?(\\])" );
+
+            a_Command.m_Alias.add( a_Alias );
+            
+        }
+                
+        m_CommandList.add( a_Command );
         
         if( m_Base.isDebugging() )
         { 
-            m_Commands.get( m_Commands.size() - 1 ).PrintContent( m_Base.getLogger() );
+            m_CommandList.get( m_CommandList.size() - 1 ).PrintContent( m_Base.getLogger() );
         }
         
         return a_Command;
     }
     
+    private void ProcessCommand( String a_Line )
+    {
+        // Remove spaces at start and end ( if they are there )
+        if( a_Line.indexOf( " " ) == 0 )                          a_Line = a_Line.substring( 1 ); 
+        if( a_Line.lastIndexOf( " " ) == a_Line.length() - 1 )    a_Line = a_Line.substring( 0, a_Line.length() - 1 );
     
+        // Split into command + args
+        m_CommandArgs = a_Line.split( " " );
+        
+        m_Command = m_CommandArgs[0];
+        
+        if( m_CommandArgs.length > 1 )
+        { 
+            m_CommandArgs = Arrays.copyOfRange( m_CommandArgs, 1, m_CommandArgs.length ); 
+        }
+        else
+        {
+            m_CommandArgs[0] = "";
+        }
+    } 
 }

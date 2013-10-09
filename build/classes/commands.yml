@@ -17,7 +17,7 @@
 #                                                                                       #
 # ------------------------------------------------------------------------------------- #
 commands:
-  - /morning = /time set 2000
+  - /morning = /time set 2000 | /weather clear
   - /noon = /time set 6000
   - /night = /time set 18000
   - /clear = /weather clear

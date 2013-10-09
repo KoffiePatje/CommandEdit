@@ -16,7 +16,7 @@ public class CommandEdit extends JavaPlugin
 {
     private boolean m_Debugging = false;
     private String pluginName = "CommandEdit";
-    private String pluginVersion = "v1.0";
+    private String pluginVersion = "v1.1";
     
     private CommandEditFileLoader m_Filesystem;
     private CommandEditProcessor m_Processor;
@@ -37,7 +37,7 @@ public class CommandEdit extends JavaPlugin
         // Register the Listeners
         this.getServer().getPluginManager().registerEvents( new CommandEditListener( this, m_Processor ), this );
         
-        this.getLogger().info( "CommandEdit succesfully loaded ! Debugmode is " + (m_Debugging?"enabled":"disabled" ) );
+        this.getLogger().info( pluginName + " " + pluginVersion + " succesfully loaded ! Debugmode is " + (m_Debugging?"enabled":"disabled" ) );
     }
     
     @Override
