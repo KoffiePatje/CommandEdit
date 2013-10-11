@@ -204,13 +204,52 @@ public class CommandEditProcessor
             else { if( m_Base.isDebugging() ){ m_Base.getLogger().info( "Targetplayer: " + Args[0] + " not found..." );  } }
         }
         // Message
-        if( Function.equalsIgnoreCase( "[message]" ) )
+        else if( Function.equalsIgnoreCase( "[message]" ) )
         {
             // Concatenate the message
             String Message = Args[0];
             for( int i = 1; i < Args.length; i++ ){ Message += " " + Args[i]; }
             
             event.getPlayer().sendMessage( Message );
+        }
+        // KickSelf
+        else if( Function.equalsIgnoreCase( "[kickself]" ) )
+        {
+            // Concatenate the message
+            String Message = Args[0];
+            for( int i = 1; i < Args.length; i++ ){ Message += " " + Args[i]; }
+            event.getPlayer().kickPlayer( Message );
+        }
+        else if( Function.equalsIgnoreCase( "[kickother]" ) && event.getPlayer().isOp() )
+        {
+            // Find Target player
+            Player a_TargetPlayer = m_Base.getServer().getPlayer( Args[0] );
+            
+            if( a_TargetPlayer != null )
+            {
+                // Concatenate the message
+                String Message = Args[1];
+                for( int i = 2; i < Args.length; i++ ){ Message += " " + Args[i]; }
+
+                // Run the Chat As
+                a_TargetPlayer.chat( Message );
+            }
+            else { if( m_Base.isDebugging() ){ m_Base.getLogger().info( "Targetplayer: " + Args[0] + " not found..." );  } }
+        }
+        else if( Function.equalsIgnoreCase( "[killself]" ) )
+        {
+            event.getPlayer().setHealth( 0 );
+        }
+        else if( Function.equalsIgnoreCase( "[killother]") )
+        {
+            // Find Target player
+            Player a_TargetPlayer = m_Base.getServer().getPlayer( Args[0] );
+            
+            if( a_TargetPlayer != null )
+            {
+                a_TargetPlayer.setHealth( 0 );
+            }
+            else { if( m_Base.isDebugging() ){ m_Base.getLogger().info( "Targetplayer: " + Args[0] + " not found..." );  } }
         }
         
     }

@@ -10,6 +10,7 @@
 
 package nl.pleduc.mc.CommandEdit;
 
+import java.io.IOException;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CommandEdit extends JavaPlugin
@@ -38,6 +39,9 @@ public class CommandEdit extends JavaPlugin
         this.getServer().getPluginManager().registerEvents( new CommandEditListener( this, m_Processor ), this );
         
         this.getLogger().info( pluginName + " " + pluginVersion + " succesfully loaded ! Debugmode is " + (m_Debugging?"enabled":"disabled" ) );
+        
+        // Metrics Test
+        enableMetrics();
     }
     
     @Override
@@ -60,5 +64,18 @@ public class CommandEdit extends JavaPlugin
     public boolean isDebugging()
     {
         return m_Debugging;
-    }  
+    } 
+    
+    private void enableMetrics()
+    {
+        try 
+        {
+                MetricsLite bml = new MetricsLite(this);
+                bml.start();
+        } 
+        catch ( IOException e) 
+        {
+                e.printStackTrace();
+        }
+    }
 }
